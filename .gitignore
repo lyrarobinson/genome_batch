@@ -1,0 +1,15 @@
+# Compiled NEURON binaries - recompile with nrnivmodl on new machine
+simulations/B_Full_2026-03-03_16-22-03/x86_64/
+
+# Simulation outputs
+simulations/kinematic_*/
+*.h5
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Misc
+*.log
+.DS_Store
