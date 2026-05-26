@@ -36,14 +36,14 @@ BASELINE = {
 
 # (min, max) — intentionally wide, including broken behaviour
 SWEEP_RANGES = {
-    'HEAD_CPG_AMP':      (0.005,   0.60),
-    'K_PROPRIO':         (0.001,   0.15),
-    'DDVD_ICLAMP_MAX':   (0.05,    5.0),
-    'GC_AWA_SCALE':      (0.01,    5.0),
-    'GC_ASH_SCALE':      (1.0,     500.0),
-    'EMA_ALPHA':          (0.0002,  0.02),
-    'GC_AWA_BASE':       (0.001,   0.5),
-    'GC_SENSORY_SCALE':  (0.001,   0.20),
+    'HEAD_CPG_AMP':      (0.0001,  2.0),
+    'K_PROPRIO':         (0.0001,  0.3),
+    'DDVD_ICLAMP_MAX':   (0.001,   8.0),
+    'GC_AWA_SCALE':      (0.001,   8.0),
+    'GC_AWA_BASE':       (0.0001,  0.8),
+    'GC_ASH_SCALE':      (0.1,     800.0),
+    'EMA_ALPHA':          (0.00001, 0.1),
+    'GC_SENSORY_SCALE':  (0.0001,  0.5),
 }
 
 START_X       = 680.0
