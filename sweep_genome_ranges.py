@@ -18,7 +18,7 @@ import h5py
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 SIM_DIR       = 'simulations/B_Full_2026-03-03_16-22-03'
-ENV_CACHE     = 'env_warmup_cache.npz'
+ENV_CACHE     = os.path.abspath('env_warmup_cache.npz')
 DURATION      = 10.0
 N_PARALLEL    = 4
 RESULTS_CSV   = 'sweep_results.csv'
@@ -29,21 +29,21 @@ BASELINE = {
     'DDVD_ICLAMP_MAX':   1.0,
     'GC_AWA_SCALE':      0.5,
     'GC_ASH_SCALE':      65.0,
-    'GC_REVERSAL_SCALE': 0.0005,
-    'GC_SAAV_MAX':       0.5,
+    'EMA_ALPHA':          0.002,
+    'GC_AWA_BASE':       0.05,
     'GC_SENSORY_SCALE':  0.02,
 }
 
 # (min, max) — intentionally wide, including broken behaviour
 SWEEP_RANGES = {
-    'HEAD_CPG_AMP':      (0.01,    0.40),
-    'K_PROPRIO':         (0.001,   0.08),
-    'DDVD_ICLAMP_MAX':   (0.1,     3.0),
-    'GC_AWA_SCALE':      (0.05,    2.0),
-    'GC_ASH_SCALE':      (5.0,     200.0),
-    'GC_REVERSAL_SCALE': (0.00005, 0.005),
-    'GC_SAAV_MAX':       (0.05,    2.0),
-    'GC_SENSORY_SCALE':  (0.002,   0.10),
+    'HEAD_CPG_AMP':      (0.005,   0.60),
+    'K_PROPRIO':         (0.001,   0.15),
+    'DDVD_ICLAMP_MAX':   (0.05,    5.0),
+    'GC_AWA_SCALE':      (0.01,    5.0),
+    'GC_ASH_SCALE':      (1.0,     500.0),
+    'EMA_ALPHA':          (0.0002,  0.02),
+    'GC_AWA_BASE':       (0.001,   0.5),
+    'GC_SENSORY_SCALE':  (0.001,   0.20),
 }
 
 START_X       = 680.0

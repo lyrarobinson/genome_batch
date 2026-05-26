@@ -76,9 +76,9 @@ BODY_LENGTH         = 20.0   # world units (~1mm scaled)
 # (authored departure: dual-model architecture; graded model uses White et al. 1986
 #  edgelist with Kunert parameter calibration rather than c302 B Full weights)
 GC_EDGELIST         = None   # set via --edgelist CLI arg or auto-detected
-GC_AWA_BASE         = 0.05   # nA baseline into AWAL/AWAR (keeps network in operating range)
 # ── Genome parameters: overridable via environment variables for batch runs ──
 import os as _os
+GC_AWA_BASE         = float(_os.environ.get('GC_AWA_BASE', '0.05'))   # nA baseline into AWAL/AWAR (keeps network in operating range)
 GC_AWA_SCALE        = float(_os.environ.get('GC_AWA_SCALE',      '0.5'))    # nA per unit of awa_south/north difference
 GC_SENSORY_SCALE    = float(_os.environ.get('GC_SENSORY_SCALE',  '0.02'))   # nA per unit of sensory current
 GC_ASH_SCALE        = float(_os.environ.get('GC_ASH_SCALE',      '65.0'))   # ASH boosted: osmolarity/pH signals weak in soil
@@ -136,7 +136,7 @@ _TAU_STEPS   = 1000   # 1000 x 0.05ms = 50ms, matching IAF tau1
 _steer_buf   = {'AIZL': _deque(maxlen=_TAU_STEPS),
                 'AIZR': _deque(maxlen=_TAU_STEPS)}
 _ema_state   = {}     # kept for compatibility
-_EMA_ALPHA   = 0.002
+_EMA_ALPHA   = float(_os.environ.get('EMA_ALPHA', '0.002'))
 
 def build_cell_cache(h):
     """Pre-cache all neuron cell references to avoid repeated getattr calls.
