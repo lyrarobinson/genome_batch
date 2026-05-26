@@ -77,10 +77,12 @@ BODY_LENGTH         = 20.0   # world units (~1mm scaled)
 #  edgelist with Kunert parameter calibration rather than c302 B Full weights)
 GC_EDGELIST         = None   # set via --edgelist CLI arg or auto-detected
 GC_AWA_BASE         = 0.05   # nA baseline into AWAL/AWAR (keeps network in operating range)
-GC_AWA_SCALE        = 0.5    # nA per unit of awa_south/north difference (asymmetry amplifier)
-GC_SENSORY_SCALE    = 0.02   # nA per unit of sensory current (NEURON->graded scaling)
-GC_ASH_SCALE        = 65.0  # ASH boosted: osmolarity/pH signals weak in soil (~0.001nA raw)
-GC_SAAV_MAX         = 0.5   # nA: max SAAV injection at full satiation (worm.satiation=1.0)
+# ── Genome parameters: overridable via environment variables for batch runs ──
+import os as _os
+GC_AWA_SCALE        = float(_os.environ.get('GC_AWA_SCALE',      '0.5'))    # nA per unit of awa_south/north difference
+GC_SENSORY_SCALE    = float(_os.environ.get('GC_SENSORY_SCALE',  '0.02'))   # nA per unit of sensory current
+GC_ASH_SCALE        = float(_os.environ.get('GC_ASH_SCALE',      '65.0'))   # ASH boosted: osmolarity/pH signals weak in soil
+GC_SAAV_MAX         = float(_os.environ.get('GC_SAAV_MAX',       '0.5'))    # nA: max SAAV injection at full satiation
                              # Authored departure: real satiation circuit (NSM serotonin,
                              # intestinal signals) absent from Varshney 2011. We author
                              # a drive into SAAV -- a real neuron with real AVA synapses
@@ -97,7 +99,9 @@ GC_MECH_SCALE       = 1.0    # raised from 0.1: puts FLP/PVD/PVC at 5-50 NI unit
 GC_TURN_SCALE       = 0.08   # turn_signal per mV of AVAL-AVAR difference
 GC_REVERSAL_V       = -63.5  # mV: AVA voltage above which reversal probability increases
 GC_PIROUETTE_V      = -63.0  # mV: AVA voltage above which pirouette suppression releases
-GC_REVERSAL_SCALE   = 0.0005 # reversal prob per mV AVA depolarisation above baseline
+GC_REVERSAL_SCALE   = float(_os.environ.get('GC_REVERSAL_SCALE', '0.0005'))  # reversal prob per mV AVA depolarisation above baseline
+HEAD_CPG_AMP        = float(_os.environ.get('HEAD_CPG_AMP',       '0.13'))   # CPG oscillation amplitude into DB/VB neurons
+K_PROPRIO           = float(_os.environ.get('K_PROPRIO',          '0.02'))   # proprioceptive curvature feedback gain (nA/rad)
                                # lowered 10x: mechanosensory->AVA pathway was over-triggering
 GC_STEP_MS          = 5.0    # ms: graded model BDF step (adaptive solver handles stiffness)
 
@@ -448,7 +452,7 @@ _MAX_TOTAL_W = max(list(_DD_TOTAL_W.values()) + list(_VD_TOTAL_W.values()))  # 1
 # IClamp amplitude when all drivers fire at activity=1.0
 # Calibrated so DD/VD reach activity ~0.3 at typical driver activity ~0.4
 # IAF: need ~0.6nA for activity=0.3; drivers at 0.4 mean -> scale = 0.6/0.4 = 1.5nA
-DDVD_ICLAMP_MAX = 1.0   # nA — max IClamp when drivers fully active
+DDVD_ICLAMP_MAX = float(_os.environ.get('DDVD_ICLAMP_MAX', '1.0'))   # nA — max IClamp when drivers fully active
 
 # Cache of DD/VD IClamp objects (built on first call)
 _ddvd_iclamps = {}
@@ -1762,7 +1766,7 @@ def run(sim_dir, duration=30.0, dt_nrn=0.05, log_every=100, log_every_env=500, s
         # Amplitude: HEAD_CPG_AMP modulates each neuron relative to its tonic level.
         # Gated on forward locomotion — suppressed during reversals and quiescence.
         # Authored explicitly — documented departure from raw connectome output.
-        HEAD_CPG_AMP  = 0.13
+        # HEAD_CPG_AMP read from module-level global (env-overridable)
         _WAVE_FREQ    = 1.8   # Hz
         _PHASE_PER_SEG = 2.0 * math.pi * _WAVE_FREQ / 24.0  # rad per segment
         # DB neuron segment indices (for phase calculation)
@@ -1791,7 +1795,7 @@ def run(sim_dir, duration=30.0, dt_nrn=0.05, log_every=100, log_every_env=500, s
         # Authored departure: implemented as IClamp injection rather than
         # stretch-sensitive membrane conductance (absent from IAF model).
         # Gain K_PROPRIO=0.06 nA/rad — tuned to produce wave without runaway.
-        K_PROPRIO = 0.02
+        # K_PROPRIO read from module-level global (env-overridable)
         # DB neuron -> primary segment mapping (peak innervation from weight arrays)
         _db_segs = {'DB1': 7,  'DB2': 9,  'DB3': 11, 'DB4': 13,
                     'DB5': 16, 'DB6': 18, 'DB7': 21}
