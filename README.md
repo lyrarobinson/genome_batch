@@ -45,7 +45,7 @@ HDF5_USE_FILE_LOCKING=FALSE python3 -u worm_kinematic_sim_graded.py \
     --env_step_ms 1.0 \
     --start_x 680 --start_z 270 \
     --nacl_seed 42 --colony_seed 7 \
-    --env_cache env_warmup_cache.npz \
+    --env_cache $(pwd)/env_warmup_cache.npz \
     --log_every 100 \
     --checkpoint_every 0
 ```
